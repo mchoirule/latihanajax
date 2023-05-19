@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assesment 2</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .articles-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .articles-table th, .articles-table td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "https://api.spaceflightnewsapi.net/v3/articles",
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    var articles = data;
+                    var table = $('<table>').addClass('articles-table');
+                    var tableHead = $('<thead>').appendTo(table);
+                    var tableBody = $('<tbody>').appendTo(table);
+                    
+                    var headerRow = $('<tr>').appendTo(tableHead);
+                    $('<th>').text('Judul').appendTo(headerRow);
+                    $('<th>').text('Penulis').appendTo(headerRow);
+                    $('<th>').text('Tanggal Publikasi').appendTo(headerRow);
+                    
+                    for (var i = 0; i < articles.length; i++) {
+                        var article = articles[i];
+                        var tableRow = $('<tr>').appendTo(tableBody);
+                        $('<td>').text(article.title).appendTo(tableRow);
+                        $('<td>').text(article.newsSite).appendTo(tableRow);
+                        $('<td>').text(article.publishedAt).appendTo(tableRow);
+                    }
+                    
+                    $('#articles-table-container').html(table);
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Data Articles</h1>
+    <div id="articles-table-container"></div>
+</body>
+</html>
